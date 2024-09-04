@@ -68,8 +68,6 @@ int main() {
     std::cin >> frequencies[i];
   }
 
-  // How do I reverse a linked list recursively?
-
   // Priority queue (min-heap) to store the nodes of the Huffman tree
   std::priority_queue<Node *, std::vector<Node *>, Compare> minHeap;
   // Priority Queue in C++?
