@@ -23,3 +23,7 @@ void traverse_util(Node *root, const std::string &sequence);
 
 // Function to start the tree traversal
 void traverse(Node *root);
+
+std::priority_queue<Node *, std::vector<Node *>, Compare> createHuffmanTree(char *alphabets, int *frequencies, int num);
+
+void cleanUp(Node *root);

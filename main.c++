@@ -6,6 +6,8 @@
 
 #include "HuffmanEncoding.h"
 
+typedef std::priority_queue<Node *, std::vector<Node *>, Compare> HuffmanTree;
+
 int main() {
   std::cout << "Enter the number of alphabets: " << std::endl;
   int num = 0;
@@ -28,28 +30,13 @@ int main() {
   }
 
   // Priority queue (min-heap) for the tree
-  std::priority_queue<Node *, std::vector<Node *>, Compare> minHeap;
 
-  for (int i = 0; i < num; i++) {
-    minHeap.push(create_node(alphabets[i], frequencies[i]));
-  }
+  HuffmanTree huffman_tree;
 
-  // Building the Huffman tree
-  while (minHeap.size() > 1) {
-    Node *left = minHeap.top();
-    minHeap.pop();
-    Node *right = minHeap.top();
-    minHeap.pop();
-
-    Node *joined_node = create_node('\0', left->freq + right->freq); // internal node
-    joined_node->left = left;
-    joined_node->right = right;
-
-    minHeap.push(joined_node);
-  }
+  huffman_tree = createHuffmanTree(alphabets, frequencies, sizeof(frequencies)/sizeof(int));
 
   // Last node is the root
-  Node *root = minHeap.top();
+  Node *root = huffman_tree.top();
 
   traverse(root);
 
@@ -57,18 +44,7 @@ int main() {
   delete[] alphabets;
   delete[] frequencies;
 
-  // Cleanup: Postorder
-  std::queue<Node *> cleanupQueue;
-  cleanupQueue.push(root);
-  while (!cleanupQueue.empty()) {
-    Node *current = cleanupQueue.front();
-    cleanupQueue.pop();
-    if (current->left != nullptr)
-      cleanupQueue.push(current->left);
-    if (current->right != nullptr)
-      cleanupQueue.push(current->right);
-    delete current;
-  }
+  cleanUp(root);
 
   return 0;
 }
