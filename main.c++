@@ -6,12 +6,6 @@
 
 #include "HuffmanEncoding.h"
 
-// Making a custom priority queue
-// Stores Node*
-// Uses vector to store Node *
-// Uses a custom Compare struct to compare the frequencies in the Node*
-typedef std::priority_queue<Node *, std::vector<Node *>, Compare> HuffmanTree;
-
 int main() {
   std::cout << "Enter the number of alphabets: " << std::endl;
   int num = 0;

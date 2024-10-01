@@ -1,6 +1,6 @@
 1. Make a zipper file
   - In this file, we define methods 
-    - We first check if the user specified a folder or a file
+    - We first check if the user specified a folder or a file (DONE)
     - for reading files specified by the user
       - Make the huffmanTree
       - %HuffmanTree:TreeSize%:Pack the Huffman Tree at the start of the file

@@ -6,8 +6,6 @@
 
 #include "HuffmanEncoding.h"
 
-typedef std::priority_queue<Node *, std::vector<Node *>, Compare> HuffmanTree;
-
 Node *create_node(char letter, int freq) {
   return new Node(letter, freq);
 }
