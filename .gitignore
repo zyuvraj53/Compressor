@@ -1,3 +1,6 @@
 .vscode
 ./HuffmanEncoding.exe
 ./HuffmanEncoding.out
+./HuffmanEncoding.o
+./main.o
+./output.out

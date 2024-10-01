@@ -1,5 +1,4 @@
 #include <string>
-
 typedef struct Node {
   char letter;
   int freq;
@@ -10,11 +9,13 @@ typedef struct Node {
 } Node;
 
 struct Compare {
-  // Operator Overloading for making a Min-Heap
+  // Overloading function call operator for making a Min-Heap
   bool operator()(Node *a, Node *b){
     return a->freq > b->freq; // Min-heap based on frequency
   }
 };
+
+typedef std::priority_queue<Node *, std::vector<Node *>, Compare> HuffmanTree;
 
 Node *create_node(char letter, int freq);
 
@@ -24,6 +25,6 @@ void traverse_util(Node *root, const std::string &sequence);
 // Function to start the tree traversal
 void traverse(Node *root);
 
-std::priority_queue<Node *, std::vector<Node *>, Compare> createHuffmanTree(char *alphabets, int *frequencies, int num);
+HuffmanTree createHuffmanTree(char *alphabets, int *frequencies, int num);
 
 void cleanUp(Node *root);

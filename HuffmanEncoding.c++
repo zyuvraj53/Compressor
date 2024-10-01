@@ -6,6 +6,8 @@
 
 #include "HuffmanEncoding.h"
 
+typedef std::priority_queue<Node *, std::vector<Node *>, Compare> HuffmanTree;
+
 Node *create_node(char letter, int freq) {
   return new Node(letter, freq);
 }
@@ -31,8 +33,8 @@ void traverse(Node *root) {
   traverse_util(root, "");
 }
 
-std::priority_queue<Node *, std::vector<Node *>, Compare> createHuffmanTree(char *alphabets, int *frequencies, int num){
-  std::priority_queue<Node *, std::vector<Node *>, Compare> minHeap;
+HuffmanTree createHuffmanTree(char *alphabets, int *frequencies, int num){
+  HuffmanTree minHeap;
 
   for (int i = 0; i < num; i++) {
     minHeap.push(create_node(alphabets[i], frequencies[i]));

@@ -6,6 +6,10 @@
 
 #include "HuffmanEncoding.h"
 
+// Making a custom priority queue
+// Stores Node*
+// Uses vector to store Node *
+// Uses a custom Compare struct to compare the frequencies in the Node*
 typedef std::priority_queue<Node *, std::vector<Node *>, Compare> HuffmanTree;
 
 int main() {
@@ -33,7 +37,7 @@ int main() {
 
   HuffmanTree huffman_tree;
 
-  huffman_tree = createHuffmanTree(alphabets, frequencies, sizeof(frequencies)/sizeof(int));
+  huffman_tree = createHuffmanTree(alphabets, frequencies, num);
 
   // Last node is the root
   Node *root = huffman_tree.top();
