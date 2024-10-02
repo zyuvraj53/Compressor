@@ -103,8 +103,34 @@ std::unordered_map<char, std::string> buildCodes(Node* root){
   return huffmanCodes;
 }
 
-void encode_file(std::unordered_map<char, std::string> huffmanCodes, const char* path){
+void zip_file(std::unordered_map<char, std::string> codes, const char* in_path, const char* out_path){
 
-  delete_content(path);
+  std::fstream in_file;
+  std::fstream out_file;
+  in_file.open(in_path, std::ios::in);
+  out_file.open(out_path, std::ios::out); // writing , app for appending
+
+  if(in_file.is_open() && out_file.is_open()){
+    std::string line;
+    while(getline(in_file, line)){
+      for(char c : line){
+        out_file << codes[c];
+      }
+    }
+  }
+
+}
+
+void encode_file(std::unordered_map<char, std::string> huffmanCodes, const char* in_path, const char* out_path){
+
+  delete_content(out_path);
+
+  std::array<char, 128> characters = getCount(in_path);
+
+  Node *root = makeTree(characters);
+
+  std::unordered_map<char, std::string> codes = buildCodes(root);
+
+  zip_file(codes, in_path, out_path);
 
 }
