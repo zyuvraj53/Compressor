@@ -31,7 +31,7 @@ void traverse(Node *root) {
   traverse_util(root, "");
 }
 
-HuffmanTree createHuffmanTree(char *alphabets, int *frequencies, int num){
+HuffmanTree createHuffmanTree(std::vector<char> alphabets, std::vector<int> frequencies, int num){
   HuffmanTree minHeap;
 
   for (int i = 0; i < num; i++) {

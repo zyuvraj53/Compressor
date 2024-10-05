@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "HuffmanEncoding.h"
+#include "FileHandling.h"
 
 int main() {
   //std::cout << "Enter the number of alphabets: " << std::endl;
@@ -43,6 +43,8 @@ int main() {
   //delete[] frequencies;
 
   //cleanUp(root);
+
+  zip_file("input.dat", "output.dat");
 
   return 0;
 }

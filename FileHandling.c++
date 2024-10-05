@@ -4,6 +4,7 @@
 #include <queue>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 //! For now I am only considering ASCII characters as the characters that will be read, so I will be taking a 128 byte char array, if someone wants to extend this to include other character sets, they should use a hashtable, as an array will be too long
 
@@ -25,29 +26,45 @@
 // 2. For each character append the Huffman Codes to a new file
 // 3. The new file will be the Encoded File
 
+// TODO: I am not cleaning up the memory for the huffman tree, use cleanUp for the HuffmanTree cleaning
+
 #include "HuffmanEncoding.h"
 
-std::array<char, 128> getCount(const char *path) {
+std::array<int, 128> getCount(const char *path) {
 
-  std::array<char, 128> characters = {};
+  std::array<int, 128> characters = {};
   std::fstream file;
 
   file.open(path, std::ios::in); // Open file in read mode
   if (file.is_open()) {
     std::string line;
+    std::cout << "File openened successfully" << std::endl;
     while (getline(file, line)) { // getline function takes the stream, and the string
       for (char c : line) {
-        if (c >= 0 && c < 128) { // Ensure character is in the valid ASCII range
-          characters[c]++;
-        } else {
-          std::cout << "Warning: Non-ASCII character found: " << c << std::endl;
-        }
+        //! This never enters the else block, as char only ranges from 0 to 127
+        // if (c >= 0 && c < 128) { // Ensure character is in the valid ASCII range
+        // characters[c]++;
+        //} else {
+        // std::cout << "Warning: Non-ASCII character found: " << c << std::endl;
+        //}
+
+        //^ Fixed: changed the std::array from char to int and casted to unsigned char
+
+        characters[static_cast<unsigned char>(c)]++;
       }
     }
     file.close(); // Close the file after reading
   } else {
     std::cerr << "Could not open file!" << std::endl;
   }
+
+  for (int i = 0; i < 128; i++) {
+    if (characters[i] > 0) {
+      std::cout << "Character: " << static_cast<char>(i) << " Count: " << characters[i] << std::endl;
+    }
+  }
+
+  std::cout << "getCount() ran successfully" << std::endl;
 
   return characters;
 }
@@ -63,26 +80,34 @@ void delete_content(const char *path) {
   }
 }
 
-Node *makeTree(std::array<char, 128> characters) {
+Node *makeTree(std::array<int, 128> characters) {
 
-  char *chars = {};
-  int *frequencies = {};
-
+  // char *chars = {};
+  std::vector<char> chars;
+  // int *frequencies = {};
+  std::vector<int> frequencies;
+  std::cout << "makeTree() entered" << std::endl;
+  //! The mistake is somewhere here in the loop
+  //^ Fixed: Changes in getCount()
   int counter = 0;
   for (int i = 0; i < 128; i++) {
     if (characters[i] > 0) {
+      std::cout << characters[i] << ", " << i << std::endl;
       frequencies[counter] = characters[i];
       chars[counter] = i;
       counter++;
     }
   }
+  std::cout << "makeTree() ran partially" << std::endl;
 
   HuffmanTree ht = createHuffmanTree(chars, frequencies, counter);
   Node *root = ht.top();
+
+  std::cout << "makeTree() ran successfully" << std::endl;
   return root;
 }
 
-void buildCodes_util(std::unordered_map<char, std::string> huffmanCodes, Node* root,const std::string &str) {
+void buildCodes_util(std::unordered_map<char, std::string> huffmanCodes, Node *root, const std::string &str) {
   if (!root)
     return;
 
@@ -94,7 +119,7 @@ void buildCodes_util(std::unordered_map<char, std::string> huffmanCodes, Node* r
   buildCodes_util(huffmanCodes, root->right, str + "1");
 }
 
-std::unordered_map<char, std::string> buildCodes(Node* root){
+std::unordered_map<char, std::string> buildCodes(Node *root) {
   std::unordered_map<char, std::string> huffmanCodes;
   const std::string str;
 
@@ -103,34 +128,32 @@ std::unordered_map<char, std::string> buildCodes(Node* root){
   return huffmanCodes;
 }
 
-void zip_file(std::unordered_map<char, std::string> codes, const char* in_path, const char* out_path){
+void encode_file(std::unordered_map<char, std::string> codes, const char *in_path, const char *out_path) {
 
   std::fstream in_file;
   std::fstream out_file;
   in_file.open(in_path, std::ios::in);
   out_file.open(out_path, std::ios::out); // writing , app for appending
 
-  if(in_file.is_open() && out_file.is_open()){
+  if (in_file.is_open() && out_file.is_open()) {
     std::string line;
-    while(getline(in_file, line)){
-      for(char c : line){
+    while (getline(in_file, line)) {
+      for (char c : line) {
         out_file << codes[c];
       }
     }
   }
-
 }
 
-void encode_file(std::unordered_map<char, std::string> huffmanCodes, const char* in_path, const char* out_path){
+void zip_file(const char *in_path, const char *out_path) {
 
   delete_content(out_path);
 
-  std::array<char, 128> characters = getCount(in_path);
+  std::array<int, 128> characters = getCount(in_path);
 
   Node *root = makeTree(characters);
 
   std::unordered_map<char, std::string> codes = buildCodes(root);
 
-  zip_file(codes, in_path, out_path);
-
+  encode_file(codes, in_path, out_path);
 }

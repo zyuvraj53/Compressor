@@ -29,6 +29,6 @@ void traverse_util(Node *root, const std::string &sequence);
 // Function to start the tree traversal
 void traverse(Node *root);
 
-HuffmanTree createHuffmanTree(char *alphabets, int *frequencies, int num);
+HuffmanTree createHuffmanTree(std::vector<char> alphabets, std::vector<int> frequencies, int num);
 
 void cleanUp(Node *root);

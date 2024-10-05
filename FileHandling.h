@@ -6,9 +6,9 @@
 
 #include "HuffmanEncoding.h"
 
-std::array<char, 128> getCount(const char *path);
+std::array<int, 128> getCount(const char *in_path);
 
-void delete_content(const char *path);
+void delete_content(const char *out_path);
 
 Node *makeTree(std::array<char, 128> characters);
 
@@ -16,7 +16,7 @@ void buildCodes_util(std::unordered_map<char, std::string> huffmanCodes, Node* r
 
 std::unordered_map<char, std::string> buildCodes(Node* root);
 
-void zip_file(std::unordered_map<char, std::string> codes, const char* in_path, const char* out_path);
+void encode_file(std::unordered_map<char, std::string> codes, const char* in_path, const char* out_path);
 
 
-void encode_file(std::unordered_map<char, std::string> huffmanCodes, const char* in_path, const char* out_path);
+void zip_file(const char* in_path, const char* out_path);
