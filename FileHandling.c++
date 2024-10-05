@@ -58,14 +58,6 @@ std::array<int, 128> getCount(const char *path) {
     std::cerr << "Could not open file!" << std::endl;
   }
 
-  for (int i = 0; i < 128; i++) {
-    if (characters[i] > 0) {
-      std::cout << "Character: " << static_cast<char>(i) << " Count: " << characters[i] << std::endl;
-    }
-  }
-
-  std::cout << "getCount() ran successfully" << std::endl;
-
   return characters;
 }
 
@@ -86,24 +78,38 @@ Node *makeTree(std::array<int, 128> characters) {
   std::vector<char> chars;
   // int *frequencies = {};
   std::vector<int> frequencies;
-  std::cout << "makeTree() entered" << std::endl;
   //! The mistake is somewhere here in the loop
   //^ Fixed: Changes in getCount()
-  int counter = 0;
+
   for (int i = 0; i < 128; i++) {
     if (characters[i] > 0) {
-      std::cout << characters[i] << ", " << i << std::endl;
-      frequencies[counter] = characters[i];
-      chars[counter] = i;
-      counter++;
+      frequencies.push_back(characters[i]);
+      chars.push_back(static_cast<char> (i));
     }
   }
-  std::cout << "makeTree() ran partially" << std::endl;
 
-  HuffmanTree ht = createHuffmanTree(chars, frequencies, counter);
+  //! Errors: frequencies and chars not assigning values
+  //^ Fixed: was using normal array assignment, rather should use push_back
+
+  //% Read about static_cast in C++
+
+  //~ used for explicit type conversion
+  //~ Provides a more safer and controlled way to typecast than traditional C style typecasting
+
+  //~ Checked at compile time
+
+  //~ Can be used for:
+  //~   1. From a derived class pointer to a base class pointer
+  //~   2. For conversions to and from fundamental data types
+  //~   3. Convert pointers or references up and down the inheritance hierarchy in object-oriented code, but it cannot cast across or between unrelated types
+
+  //~ Downcasting should be done with dynamic_cast
+
+  //% Read about dynamic_cast in C++
+
+  HuffmanTree ht = createHuffmanTree(chars, frequencies, chars.size());
   Node *root = ht.top();
 
-  std::cout << "makeTree() ran successfully" << std::endl;
   return root;
 }
 
@@ -143,6 +149,9 @@ void encode_file(std::unordered_map<char, std::string> codes, const char *in_pat
       }
     }
   }
+
+  in_file.close();
+  out_file.close();
 }
 
 void zip_file(const char *in_path, const char *out_path) {
